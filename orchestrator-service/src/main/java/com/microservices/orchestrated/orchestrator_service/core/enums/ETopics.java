@@ -1,4 +1,4 @@
-package com.microservices.orchestrated.orchestrator_service;
+package com.microservices.orchestrated.orchestrator_service.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

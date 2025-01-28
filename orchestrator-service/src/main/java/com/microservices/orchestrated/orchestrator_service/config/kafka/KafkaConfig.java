@@ -12,6 +12,10 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+
+import static com.microservices.orchestrated.orchestrator_service.core.enums.ETopics.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,36 +24,30 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaConfig {
 
-    private static final Integer PARTITION_COUNT = 1;
-    private static final Integer REPLICA_COUNT = 1;
+    private static final Integer PARTITIONS_COUNT = 1;
+    private static final Integer REPLICAS_COUNT = 1;
 
     @Value("${spring.kafka.bootstrap-servers}")
-    private String BOOTSTRAP_SERVERS;
+    private String bootstrapServers;
 
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
-    @Value("${spring.kafka.topic.orchestrator}")
-    private String orchestratorTopic;
-
-    @Value("${spring.kafka.topic.inventory-success}")
-    private String inventorySuccessTopic;
-
-    @Value("${spring.kafka.topic.inventory-fail}")
-    private String inventoryFailTopic;
+    @Value("${spring.kafka.consumer.auto-offset-reset}")
+    private String autoOffsetReset;
 
     @Bean
-    public ConsumerFactory<Integer, String> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(consumerProps());
+    public ConsumerFactory<String, String> consumerFactory() {
+        return new DefaultKafkaConsumerFactory<String, String>(consumerProps());
     }
 
     private Map<String, Object> consumerProps() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        var props = new HashMap<String, Object>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         return props;
     }
 
@@ -59,9 +57,8 @@ public class KafkaConfig {
     }
 
     private Map<String, Object> producerProps() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+        var props = new HashMap<String, Object>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return props;
@@ -75,22 +72,64 @@ public class KafkaConfig {
     private NewTopic buildTopic(String name) {
         return TopicBuilder
                 .name(name)
-                .partitions(PARTITION_COUNT)
-                .replicas(REPLICA_COUNT)
+                .replicas(REPLICAS_COUNT)
+                .partitions(PARTITIONS_COUNT)
                 .build();
     }
 
     @Bean
-    public NewTopic orchestratorTopic() {
-        return buildTopic(orchestratorTopic);
+    public NewTopic startSagaTopic() {
+        return buildTopic(START_SAGA.getTopic());
     }
+
+    @Bean
+    public NewTopic orchestratorTopic() {
+        return buildTopic(BASE_ORCHESTRATOR.getTopic());
+    }
+
+    @Bean
+    public NewTopic finishSuccessTopic() {
+        return buildTopic(FINISH_SUCCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic finishFailTopic() {
+        return buildTopic(FINISH_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic productValidationSuccessTopic() {
+        return buildTopic(PRODUCT_VALIDATION_SUCCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic productValidationFailTopic() {
+        return buildTopic(PRODUCT_VALIDATION_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic paymentSuccessTopic() {
+        return buildTopic(PAYMENT_SUCCESS.getTopic());
+    }
+
+    @Bean
+    public NewTopic paymentFailTopic() {
+        return buildTopic(PAYMENT_FAIL.getTopic());
+    }
+
     @Bean
     public NewTopic inventorySuccessTopic() {
-        return buildTopic(inventorySuccessTopic);
+        return buildTopic(INVENTORY_SUCCESS.getTopic());
     }
 
     @Bean
     public NewTopic inventoryFailTopic() {
-        return buildTopic(inventoryFailTopic);
+        return buildTopic(INVENTORY_FAIL.getTopic());
+    }
+
+    @Bean
+    public NewTopic notifyEndingTopic() {
+        return buildTopic(NOTIFY_ENDING.getTopic());
+
     }
 }

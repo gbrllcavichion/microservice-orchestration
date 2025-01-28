@@ -1,0 +1,55 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-InventoryServiceApplication<inventory-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservices.orchestrated.inventory_service.InventoryServiceApplication",
+            "projectName": "inventory-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-OrchestratorServiceApplication<orchestrator-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservices.orchestrated.orchestrator_service.OrchestratorServiceApplication",
+            "projectName": "orchestrator-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-OrderServiceApplication<order-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservices.orchestrated.order_service.OrderServiceApplication",
+            "projectName": "order-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PaymentServiceApplication<payment-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservices.orchestrated.payment_service.PaymentServiceApplication",
+            "projectName": "payment-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ProductValidationServiceApplication<product-validation-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservices.orchestrated.product_validation_service.ProductValidationServiceApplication",
+            "projectName": "product-validation-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
