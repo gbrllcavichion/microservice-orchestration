@@ -1,4 +1,5 @@
-package com.microservices.orchestrated.order-service.config.kafka;
+package com.microservices.orchestrated.order_service.config.kafka;
+
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
