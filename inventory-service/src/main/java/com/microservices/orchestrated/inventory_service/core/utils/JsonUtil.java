@@ -1,9 +1,9 @@
-package com.microservices.orchestrated.order_service.core.utils;
+package com.microservices.orchestrated.inventory_service.core.utils;
 
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microservices.orchestrated.order_service.core.document.Event;
+import com.microservices.orchestrated.inventory_service.core.dto.Event;
 
 import lombok.AllArgsConstructor;
 

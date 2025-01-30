@@ -1,0 +1,17 @@
+id_tokens:
+  VAULT_ID_TOKEN:
+    aud: https://hcvault-nonprod.dell.com
+
+stages:
+  - sync
+  - restart
+
+include:
+  - project: devops/job-templates
+    ref: v3.0.0
+    file: deploy-jobs.yml
+  - project: devops/image-template
+    ref: docker-image-template
+    file: images-jobs.yml
+
+include:   - project: devops/cicd-constructs    ref: v3.0.0    file: cicd-constructs.ymlpasswordsync-default-idtoken:  stage: sync  image: $TOOLBOX_IMG  variables:    VAULT_SECRET_PATH: kv/CYBERARK    METADATA_FILE: devops_passwordsync_blueprint.yml  before_script:    - export CI_JOB_JWT="$VAULT_ID_TOKEN"     - echo "$VAULT_ADDR;$VAULT_NAMESPACE;$VAULT_SECRET_PATH"  script:    - echo "Executing this job to update non prod service accounts password in non prod vault"    - curl -s $BP_VERSION_SH > bp_version.sh;source bp_version.sh    - passwordsync --secretpath=$VAULT_SECRET_PATH --targetkey=$TARGET_KEY $VAULT_AUTH_METHOD  tags:    - linux 
