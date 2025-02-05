@@ -102,7 +102,6 @@ services:
       - MONGO_DB_URI:mongodb://admin:password@order-db:27017
     ports:
       - 3000:3000
-
   orchestrator-service:
     build: './orchestrator-service'
     container_name: orchestrator-service
