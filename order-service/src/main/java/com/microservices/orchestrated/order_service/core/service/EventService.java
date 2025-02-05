@@ -9,10 +9,11 @@ import com.microservices.orchestrated.order_service.config.exception.ValidationE
 import com.microservices.orchestrated.order_service.core.document.Event;
 import com.microservices.orchestrated.order_service.core.dto.EventFilters;
 import com.microservices.orchestrated.order_service.core.repository.EventRepository;
-import org.springframework.util.ObjectUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 @Slf4j
@@ -37,7 +38,7 @@ public class EventService {
         if(!isEmpty(filters.getOrderId())) {
             return findByOrderId(filters.getOrderId());
         } else {
-            return findByTransactionId(filters.getTransactionalId())
+            return findByTransactionId(filters.getTransactionalId());
         }
     }
 
