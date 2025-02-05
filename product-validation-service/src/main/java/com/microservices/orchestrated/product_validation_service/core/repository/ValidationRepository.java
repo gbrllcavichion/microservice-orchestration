@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ValidationRepository extends JpaRepository<Validation, Integer> {
 
-    Boolean existsByOrderIdAndTransactionId(Integer orderId, Integer transactionId);
-    Optional<Validation> findByOderIdAndTransactionId(Integer orderId, Integer transactionId);
+    Boolean existsByOrderIdAndTransactionId(String orderId, String transactionId);
+    Optional<Validation> findByOrderIdAndTransactionId(String orderId, String transactionId);
 
 }

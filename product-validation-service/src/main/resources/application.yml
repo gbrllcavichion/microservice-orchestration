@@ -2,7 +2,6 @@ server:
   port: 8090
 
 spring:
-
   kafka:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     topic:
@@ -10,7 +9,7 @@ spring:
       product-validation-success: product-validation-success
       product-validation-fail: product-validation-fail
     consumer:
-      group-id: inventory-group
+      group-id: product-validation-group
       auto-offset-reset: latest
 
   datasource:
