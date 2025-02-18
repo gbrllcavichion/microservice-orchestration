@@ -1,5 +1,7 @@
 package com.microservices.orchestrated.payment_service.core.consumer;
 
+import com.microservices.orchestrated.payment_service.core.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,30 +12,29 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaymentConsumer {
 
+    private final PaymentService paymentService;
     private final JsonUtil jsonUtil;
 
     @KafkaListener(
-        groupId = "${spring.kafka.consumer.group-id}",
-        topics = "${spring.kafka.topic.payment-success}"
+            groupId = "${spring.kafka.consumer.group-id}",
+            topics = "${spring.kafka.topic.payment-success}"
     )
     public void consumeSuccessEvent(String payload) {
-        log.info("Receiving success event {} from payment-success", payload);
+        log.info("Receiving success event {} from payment-success topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info(event.toString());
-
+        paymentService.realizePayment(event);
     }
 
     @KafkaListener(
-        groupId = "${spring.kafka.consumer.group-id}",
-        topics = "${spring.kafka.topic.payment-fail}"
+            groupId = "${spring.kafka.consumer.group-id}",
+            topics = "${spring.kafka.topic.payment-fail}"
     )
-    public void consumeFailEvents(String payload) {
-        log.info("Receiving rollback event {} from product-fail topic", payload);
+    public void consumeFailEvent(String payload) {
+        log.info("Receiving rollback event {} from payment-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        log.info(event.toString());
-
+        paymentService.realizeRefund(event);
     }
 }
