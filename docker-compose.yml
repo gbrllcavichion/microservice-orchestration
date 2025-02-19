@@ -47,7 +47,6 @@ services:
       POSTGRES_DB: inventory-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
     networks:
       - orchestrator-saga
     ports:

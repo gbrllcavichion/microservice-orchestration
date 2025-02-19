@@ -32,7 +32,7 @@ public class InventoryConsumer {
         topics = "${spring.kafka.topic.inventory-fail}"
     )
     public void consumeFailEvents(String payload) {
-        log.info("Receiving rollback event {} from inventory-fail topic", payload);
+        log.info("Receiving rollback event {} from inventory-faiGl topic", payload);
         var event = jsonUtil.toEvent(payload);
         inventoryService.rollbackInventory(event);
 
